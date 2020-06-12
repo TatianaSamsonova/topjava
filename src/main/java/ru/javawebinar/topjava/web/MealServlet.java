@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -50,9 +51,31 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       log.info("getAll");
-       request.setAttribute("meals", MealsUtil.getTos(MealsUtil.MEALS, MealsUtil.DEFAULT_CALORIES_PER_DAY));
-       request.getRequestDispatcher("/meals.jsp").forward(request,response);
+          String action = request.getParameter("action");
+
+          switch (action == null ? "all" : action){
+              case "delete":
+                  int id = getId(request);
+                  log.info("Delete {}", id);
+                  repository.delete(id);
+                  response.sendRedirect("meals");
+                  break;
+              case "create":
+              case "update":
+                  final Meal meal = "create".equals(action) ?
+                          new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
+                          repository.get(getId(request));
+                  request.setAttribute("meal", meal);
+                  request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
+                  break;
+              case "all":
+              default:
+                  log.info("getAll");
+                  request.setAttribute("meals",
+                          MealsUtil.getTos(repository.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                  request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                  break;
+          }
     }
 
     private int getId(HttpServletRequest request){
