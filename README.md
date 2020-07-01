@@ -1,5 +1,5 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/9e9412ce010f4068b4ae96a824765d9a)](https://www.codacy.com/manual/TatianaSamsonova/topjava?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=TatianaSamsonova/topjava&amp;utm_campaign=Badge_Grade)
-
+[![Build Status](https://travis-ci.org/TatianaSamsonova/topjava.svg?branch=master)](https://travis-ci.org/TatianaSamsonova/topjava)
 
 Java Enterprise Online Project 
 ===============================
